@@ -4,7 +4,10 @@
         <listView items="{listOfItems}" on:itemTap="{onItemTap}">
             <Template let:item>
                 <!-- Shows the list item label in the default color and style. -->
-                <label text="{item.mission_name}" />
+                <stackLayout orientation="horizontal">
+                    <image class="preview" src={item.links.flickr_images[0]} width="30" height="30" stretch="aspectFit" />
+                    <label text="{item.mission_name}" />
+                </stackLayout>
             </Template>
         </listView>
     </pullToRefresh>
@@ -16,7 +19,8 @@
     import {dataSource} from '~/services'
     import {Launch} from "../dto";
     import {PullToRefresh} from "@nativescript-community/ui-pulltorefresh";
-    import {NativeElementNode} from "svelte-native/dom";
+    import {NativeElementNode, navigate} from "svelte-native/dom";
+    import DetailsScreen from "./DetailsScreen.svelte";
 
     let ptr: NativeElementNode<PullToRefresh>;
     let listOfItems: Launch[] = [];
@@ -44,9 +48,16 @@
     }
 
     async function onItemTap({ index }) {
-        alert(listOfItems[index].mission_name);
+        const item = listOfItems[index];
+        navigate({
+            page: DetailsScreen,
+            props: { item }
+        });
     }
 </script>
 
 <style>
+    .preview {
+        background-color: silver;
+    }
 </style>
